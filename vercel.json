@@ -1,0 +1,9 @@
+# Vercel configuration
+# The site is a static Next.js app. No special config needed.
+# This file is included for documentation and future flexibility.
+
+{
+  "framework": "nextjs",
+  "buildCommand": "npm run build",
+  "outputDirectory": ".next"
+}
