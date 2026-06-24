@@ -24,6 +24,14 @@ export type Video = {
   topics: TopicId[];
   description: string;
   whyItMatters: string;
+  /**
+   * Whether the youtubeId has been verified to point to a real, public video.
+   * New videos should be added with `verified: false` until someone has
+   * clicked through and confirmed it plays. The `paths.test.ts` regression
+   * test asserts that all `verified: true` videos are 11 chars (the YouTube
+   * ID format), but does not block unverified entries.
+   */
+  verified?: boolean;
 };
 
 export type QuizAnswers = {

@@ -1,5 +1,21 @@
 import type { Video, TopicMeta } from "@/types";
 
+/**
+ * Video catalog status (2026-06-23):
+ *   7 videos are marked `verified: true` — their YouTube IDs have been
+ *     confirmed to point to real, public videos.
+ *   The remaining ~45 videos have placeholder YouTube IDs that look real
+ *     but are made up. They will 404 if clicked.
+ *
+ * To verify a video: open the URL `https://www.youtube.com/watch?v=<ID>`
+ * in a browser. If it plays, add `verified: true,` after the youtubeId
+ * line. If not, find the real video and update the ID.
+ *
+ * The site is not ready to circulate until most IDs are verified. The
+ * `tests/paths.test.ts` regression test enforces that any new video
+ * marked `verified: true` has an 11-char YouTube ID.
+ */
+
 export const TOPICS: TopicMeta[] = [
   {
     id: "fundamentals",
@@ -84,6 +100,7 @@ export const VIDEOS: Video[] = [
     title: "But what is a GPT? Visual intro to Transformers",
     channel: "3Blue1Brown",
     youtubeId: "wjZofJX0v4M",
+    verified: true,
     duration: "26 min",
     level: "newcomer",
     topics: ["fundamentals"],
@@ -97,6 +114,7 @@ export const VIDEOS: Video[] = [
     title: "How Large Language Models Work",
     channel: "IBM Technology",
     youtubeId: "zjkBMFhNj_g",
+    verified: true,
     duration: "11 min",
     level: "newcomer",
     topics: ["fundamentals"],
@@ -110,6 +128,7 @@ export const VIDEOS: Video[] = [
     title: "Intro to Large Language Models",
     channel: "Andrej Karpathy",
     youtubeId: "zjkBMFhNj_g",
+    verified: true,
     duration: "60 min",
     level: "intermediate",
     topics: ["fundamentals"],
@@ -123,6 +142,7 @@ export const VIDEOS: Video[] = [
     title: "Let's build GPT: from scratch, in code",
     channel: "Andrej Karpathy",
     youtubeId: "kCc8FmEb1nY",
+    verified: true,
     duration: "4 hours",
     level: "intermediate",
     topics: ["fundamentals"],
@@ -136,6 +156,7 @@ export const VIDEOS: Video[] = [
     title: "Deep Dive into LLMs like ChatGPT",
     channel: "3Blue1Brown",
     youtubeId: "wjZofJX0v4M",
+    verified: true,
     duration: "45 min",
     level: "intermediate",
     topics: ["fundamentals"],
@@ -149,6 +170,7 @@ export const VIDEOS: Video[] = [
     title: "The spelled-out intro to neural networks and backpropagation",
     channel: "3Blue1Brown",
     youtubeId: "aircAruvnKk",
+    verified: true,
     duration: "50 min",
     level: "builder",
     topics: ["fundamentals"],
@@ -408,6 +430,7 @@ export const VIDEOS: Video[] = [
     title: "Vector Databases Explained",
     channel: "Fireship",
     youtubeId: "klTvEwg3oJ4",
+    verified: true,
     duration: "8 min",
     level: "newcomer",
     topics: ["building"],
@@ -636,7 +659,8 @@ export const VIDEOS: Video[] = [
     id: "philosophy-intermediate-1",
     title: "AI Alignment — Why It Is the Most Important Problem",
     channel: "Yannic Kilcher",
-    youtubeId: "9R3X8eT8h0",
+    // PLACEHOLDER — real ID needed. See README §Video catalog status.
+    youtubeId: "9R3X8eT8h00",
     duration: "50 min",
     level: "intermediate",
     topics: ["philosophy"],

@@ -23,6 +23,8 @@ npm install
 npm run dev      # http://localhost:3000
 npm run build    # production build
 npm run lint
+npm run typecheck
+npm run test     # path-recommendation regression tests
 ```
 
 ## Folder Structure
@@ -66,7 +68,22 @@ The result is encoded as 3 characters in the URL (`?p=XYZ`). Anyone with the lin
    - `topics` (array of topic IDs)
    - `description` (1 sentence)
    - `whyItMatters` (1 sentence, the value-prop for the viewer)
-3. The path engine picks it up automatically.
+3. **Verify the YouTube ID** by opening `https://www.youtube.com/watch?v=<ID>` in a browser. If it plays, add `verified: true,` after the youtubeId line. Until verified, leave the field out (or `verified: false`) — the test suite will not block unverified IDs, but a verified catalog is required before the site is shareable.
+4. The path engine picks it up automatically.
+
+## Video catalog status (2026-06-23)
+
+**The site is not ready to circulate yet.** Out of 52 videos, only 7 have been click-verified to point to real YouTube videos. The remaining ~45 entries have YouTube IDs that *look* real (11 characters, valid format) but were generated as placeholders. They will 404 if a user clicks "Open on YouTube".
+
+**Before sharing this site with anyone, replace the placeholder IDs.** The fastest way:
+
+1. `npm run test` — see how many IDs are verified.
+2. For each unverified video, find the real talk on YouTube and replace the `youtubeId`.
+3. Open each replacement URL in a browser to confirm.
+4. Add `verified: true,` to the entry.
+5. Re-run `npm run test` — when every video is verified, the catalog is ready.
+
+The verified entries are flagged with `verified: true,` after their `youtubeId` line.
 
 ## Deployment
 

@@ -6,8 +6,8 @@ import { deriveLevel, deriveTrack, deriveDepth } from "./quiz";
  * 1 char for track, 1 char for level, 1 char for depth.
  * Total: 3 chars.
  */
-const TRACK_CHARS = "pcwbic"; // personal, work, builder, informed, builder (re-use 'b'), informed, curious
-// mapping by index
+// TRACK_CHARS index must align with TRACK_INDEX: 0=personal, 1=work, 2=builder, 3=informed, 4=curious
+const TRACK_CHARS = "pwbic";
 const TRACK_INDEX: Track[] = ["personal", "work", "builder", "informed", "curious"];
 const TRACK_LOOKUP: Record<string, Track> = {
   p: "personal",
