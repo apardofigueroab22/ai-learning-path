@@ -1,29 +1,26 @@
 "use client";
 
-import { useState, useCallback, useMemo } from "react";
+import { useState, useCallback, useMemo, useEffect } from "react";
 import { Hero } from "@/components/Hero";
 import { Quiz } from "@/components/Quiz";
 import { Results } from "@/components/Results";
 import { decodePath, encodeAnswers } from "@/lib/share";
 import { getPathFor } from "@/lib/paths";
 import type { QuizAnswers, Path, QuizState, ExperienceLevel } from "@/types";
+import { useQueryState } from "nuqs";
 
 type Props = {
   initialPathCode: string | null;
 };
 
 export function HomeClient({ initialPathCode }: Props) {
-  // Compute the initial state from the URL (server-rendered, no flash)
+  const [pathCode, setPathCode] = useQueryState("p", { defaultValue: initialPathCode ?? "" });
+
   const initial = useMemo(() => {
-    if (!initialPathCode) return null;
-    const decoded = decodePath(initialPathCode);
+    if (!pathCode) return null;
+    const decoded = decodePath(pathCode);
     if (!decoded) return null;
-    // Build a synthetic answers object whose derivations match the URL.
-    // Q1 (experience): 0, 1, 2
-    // Q2 (agentFamiliarity): 0, 1, 2, 3
-    // Sum: 0–2 newcomer, 3–4 intermediate, 5+ builder
-    // Q3 (goal): 0..4 → personal, work, builder, informed, curious
-    // Q5 (time): 0, 1, 2 → shallow, medium, deep
+    
     const goalMap = {
       personal: 0,
       work: 1,
@@ -46,7 +43,7 @@ export function HomeClient({ initialPathCode }: Props) {
       time: timeMap[decoded.depth],
     };
     return { answers: a, path: getPathFor(a) };
-  }, [initialPathCode]);
+  }, [pathCode]);
 
   const [state, setState] = useState<QuizState>(
     initial ? "results" : "intro"
@@ -56,49 +53,38 @@ export function HomeClient({ initialPathCode }: Props) {
   );
   const [path, setPath] = useState<Path | null>(initial?.path ?? null);
 
-  const updateUrl = useCallback((code: string | null) => {
-    if (typeof window === "undefined") return;
-    const url = new URL(window.location.href);
-    if (code) {
-      url.searchParams.set("p", code);
-    } else {
-      url.searchParams.delete("p");
-    }
-    window.history.replaceState({}, "", url.toString());
-  }, []);
-
   const handleStart = useCallback(() => {
     setAnswers(null);
     setPath(null);
     setState("quiz");
-    updateUrl(null);
+    setPathCode(null);
     window.scrollTo({ top: 0, behavior: "smooth" });
-  }, [updateUrl]);
+  }, [setPathCode]);
 
   const handleComplete = useCallback(
     (a: QuizAnswers) => {
       setAnswers(a);
       setState("calculating");
-      // Short beat to show the "thinking" UI
+      
       setTimeout(() => {
         const p = getPathFor(a);
         setPath(p);
         setState("results");
         const code = encodeAnswers(a);
-        updateUrl(code);
+        setPathCode(code);
         window.scrollTo({ top: 0, behavior: "smooth" });
-      }, 900);
+      }, 1500); // slightly longer to allow text to cycle
     },
-    [updateUrl]
+    [setPathCode]
   );
 
   const handleRestart = useCallback(() => {
     setAnswers(null);
     setPath(null);
     setState("intro");
-    updateUrl(null);
+    setPathCode(null);
     window.scrollTo({ top: 0, behavior: "smooth" });
-  }, [updateUrl]);
+  }, [setPathCode]);
 
   return (
     <main id="main" className="min-h-dvh">
@@ -117,6 +103,17 @@ export function HomeClient({ initialPathCode }: Props) {
 }
 
 function Calculating() {
+  const [text, setText] = useState("Analyzing your experience...");
+  
+  useEffect(() => {
+    const timer1 = setTimeout(() => setText("Matching to tracks..."), 500);
+    const timer2 = setTimeout(() => setText("Building your personalized path..."), 1000);
+    return () => {
+      clearTimeout(timer1);
+      clearTimeout(timer2);
+    };
+  }, []);
+
   return (
     <div className="mx-auto flex max-w-md flex-col items-center justify-center px-4 py-20 text-center animate-fade-in">
       <div className="relative h-12 w-12">
@@ -124,11 +121,11 @@ function Calculating() {
         <div className="absolute inset-2 rounded-full bg-ink/20" />
         <div className="absolute inset-3 animate-pulse rounded-full bg-ink" />
       </div>
-      <p className="mt-6 text-base font-medium text-ink">
-        Building your path...
+      <p className="mt-6 text-base font-medium text-ink transition-opacity duration-300">
+        {text}
       </p>
       <p className="mt-1 text-sm text-muted">
-        Matching videos to where you are and where you want to go.
+        Curating videos tailored to your goals.
       </p>
     </div>
   );

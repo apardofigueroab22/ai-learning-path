@@ -31,17 +31,20 @@ const HIGHLIGHTS = [
 
 export function Hero({ onStart }: Props) {
   return (
-    <div className="mx-auto w-full max-w-5xl animate-fade-in px-4 sm:px-6">
+    <div className="relative mx-auto w-full max-w-5xl animate-fade-in px-4 sm:px-6">
+      {/* Decorative Background Blobs */}
+      <div className="absolute top-0 left-1/2 -z-10 h-[400px] w-[600px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary/20 opacity-50 blur-[100px]" />
+      <div className="absolute top-40 left-1/4 -z-10 h-[300px] w-[400px] -translate-x-1/2 rounded-full bg-accent/20 opacity-50 blur-[80px]" />
       <div className="flex flex-col items-center text-center">
         <span className="pill pill-accent mb-6">
           <Sparkles className="h-3 w-3" />
           A free compendium
         </span>
 
-        <h1 className="display-2xl mx-auto max-w-4xl text-ink">
+        <h1 className="display-2xl mx-auto max-w-4xl text-transparent bg-clip-text bg-gradient-to-br from-ink to-primary pb-2">
           From ChatGPT on your phone to understanding{" "}
           <span className="relative inline-block">
-            <span className="relative z-10">the agents world</span>
+            <span className="relative z-10 text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent">the agents world</span>
             <span
               className="absolute inset-x-0 bottom-1 -z-0 h-3 bg-accent/30 sm:bottom-2 sm:h-4"
               aria-hidden
@@ -93,9 +96,9 @@ export function Hero({ onStart }: Props) {
           {HIGHLIGHTS.map(({ icon: Icon, title, description }) => (
             <div
               key={title}
-              className="flex flex-col gap-2 rounded-2xl border border-surface-strong bg-surface-card p-5"
+              className="flex flex-col gap-2 rounded-2xl border border-surface-strong bg-surface-card/60 backdrop-blur-xl p-5 shadow-[0_8px_30px_rgb(0,0,0,0.04)] transition-transform hover:-translate-y-1 hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)]"
             >
-              <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-canvas text-ink">
+              <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-to-br from-primary/10 to-accent/10 text-primary ring-1 ring-primary/20">
                 <Icon className="h-4 w-4" />
               </span>
               <h3 className="mt-1 text-sm font-semibold text-ink">{title}</h3>
@@ -133,9 +136,9 @@ export function Hero({ onStart }: Props) {
           ].map(([title, description], i) => (
             <li
               key={title}
-              className="group flex items-start gap-4 rounded-xl border border-surface-strong bg-canvas p-5 transition-colors hover:border-ink/20"
+              className="group flex items-start gap-4 rounded-xl border border-surface-strong bg-surface-card/60 backdrop-blur-md p-5 transition-all hover:border-primary/30 hover:shadow-lg hover:-translate-y-1"
             >
-              <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-ink font-mono text-sm font-semibold text-on-primary">
+              <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-primary to-accent font-mono text-sm font-semibold text-on-primary shadow-md">
                 {i + 1}
               </span>
               <div className="flex flex-col gap-1">

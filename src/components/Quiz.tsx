@@ -2,6 +2,7 @@
 
 import { useState, useCallback, useEffect } from "react";
 import { ArrowRight, ArrowLeft, Check } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 import { QUESTIONS } from "@/lib/quiz";
 import type { QuizAnswers } from "@/types";
 
@@ -20,6 +21,7 @@ const INITIAL: QuizAnswers = {
 
 export function Quiz({ onComplete, onCancel }: Props) {
   const [step, setStep] = useState(0);
+  const [direction, setDirection] = useState(1);
   const [answers, setAnswers] = useState<QuizAnswers>(INITIAL);
 
   const current = QUESTIONS[step];
@@ -39,6 +41,7 @@ export function Quiz({ onComplete, onCancel }: Props) {
     if (isLast) {
       onComplete(answers);
     } else {
+      setDirection(1);
       setStep((s) => s + 1);
     }
   }, [canAdvance, isLast, answers, onComplete]);
@@ -47,6 +50,7 @@ export function Quiz({ onComplete, onCancel }: Props) {
     if (step === 0) {
       onCancel();
     } else {
+      setDirection(-1);
       setStep((s) => s - 1);
     }
   }, [step, onCancel]);
@@ -74,6 +78,27 @@ export function Quiz({ onComplete, onCancel }: Props) {
   }, [canAdvance, handleNext, handleBack, current.options, handleSelect]);
 
   const progress = ((step + 1) / QUESTIONS.length) * 100;
+
+  const variants = {
+    enter: (direction: number) => {
+      return {
+        x: direction > 0 ? 20 : -20,
+        opacity: 0
+      };
+    },
+    center: {
+      zIndex: 1,
+      x: 0,
+      opacity: 1
+    },
+    exit: (direction: number) => {
+      return {
+        zIndex: 0,
+        x: direction < 0 ? 20 : -20,
+        opacity: 0
+      };
+    }
+  };
 
   return (
     <div
@@ -107,77 +132,91 @@ export function Quiz({ onComplete, onCancel }: Props) {
         aria-label={`Question ${step + 1} of ${QUESTIONS.length}`}
       >
         <div
-          className="h-full rounded-full bg-ink transition-all duration-500 ease-out"
+          className="h-full rounded-full bg-gradient-to-r from-primary to-accent transition-all duration-500 ease-out"
           style={{ width: `${progress}%` }}
         />
       </div>
 
-      <div
-        key={current.id}
-        className="rounded-2xl border border-surface-strong bg-surface-card p-6 shadow-sm sm:p-10 animate-fade-in"
-      >
-        <p className="eyebrow mb-3">
-          {current.eyebrow} · Question {current.number}
-        </p>
-        <h2 className="display-md mb-2">{current.question}</h2>
-        {current.helper && (
-          <p className="mb-8 text-sm text-muted">{current.helper}</p>
-        )}
-        {!current.helper && <div className="mb-6" />}
+      <div className="relative min-h-[400px]">
+        <AnimatePresence mode="wait" custom={direction}>
+          <motion.div
+            key={current.id}
+            custom={direction}
+            variants={variants}
+            initial="enter"
+            animate="center"
+            exit="exit"
+            transition={{
+              x: { type: "spring", stiffness: 300, damping: 30 },
+              opacity: { duration: 0.2 }
+            }}
+            className="rounded-3xl border border-surface-strong bg-surface-card/70 backdrop-blur-xl p-6 shadow-xl sm:p-10 w-full"
+          >
+            <p className="eyebrow mb-3 text-primary font-bold tracking-widest">
+              {current.eyebrow} · Question {current.number}
+            </p>
+            <h2 className="display-md mb-2 bg-clip-text text-transparent bg-gradient-to-br from-ink to-primary">{current.question}</h2>
+            {current.helper && (
+              <p className="mb-8 text-sm text-muted">{current.helper}</p>
+            )}
+            {!current.helper && <div className="mb-6" />}
 
-        <fieldset>
-          <legend className="sr-only">{current.question}</legend>
-          <div className="flex flex-col gap-3" role="radiogroup">
-            {current.options.map((opt, i) => {
-              const isSelected = currentAnswer === opt.value;
-              return (
-                <button
-                  key={opt.value}
-                  type="button"
-                  role="radio"
-                  aria-checked={isSelected}
-                  onClick={() => handleSelect(opt.value)}
-                  className={`group relative flex w-full items-start gap-4 rounded-xl border-2 p-4 text-left transition-all sm:p-5 ${
-                    isSelected
-                      ? "border-ink bg-canvas shadow-sm"
-                      : "border-surface-strong bg-canvas hover:border-ink/30 hover:bg-surface-soft"
-                  }`}
-                >
-                  <span
-                    className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full border-2 transition-colors ${
-                      isSelected
-                        ? "border-ink bg-ink text-on-primary"
-                        : "border-surface-strong bg-canvas text-transparent"
-                    }`}
-                    aria-hidden
-                  >
-                    {isSelected ? (
-                      <Check className="h-3.5 w-3.5" strokeWidth={3} />
-                    ) : (
-                      <span className="text-xs font-medium text-muted group-hover:text-ink">
-                        {i + 1}
-                      </span>
-                    )}
-                  </span>
-                  <span className="flex flex-col gap-1">
-                    <span
-                      className={`text-base font-medium leading-snug ${
-                        isSelected ? "text-ink" : "text-ink"
+            <fieldset>
+              <legend className="sr-only">{current.question}</legend>
+              <div className="flex flex-col gap-3" role="radiogroup">
+                {current.options.map((opt, i) => {
+                  const isSelected = currentAnswer === opt.value;
+                  return (
+                    <motion.button
+                      layout
+                      key={opt.value}
+                      type="button"
+                      role="radio"
+                      aria-checked={isSelected}
+                      onClick={() => handleSelect(opt.value)}
+                      className={`group relative flex w-full items-start gap-4 rounded-xl border-2 p-4 text-left transition-all sm:p-5 ${
+                        isSelected
+                          ? "border-primary bg-primary/5 shadow-md shadow-primary/10"
+                          : "border-surface-strong bg-canvas/40 backdrop-blur-md hover:border-primary/40 hover:bg-surface-soft hover:-translate-y-0.5 hover:shadow-lg"
                       }`}
                     >
-                      {opt.label}
-                    </span>
-                    {opt.description && (
-                      <span className="text-sm leading-relaxed text-muted">
-                        {opt.description}
+                      <span
+                        className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full border-2 transition-all duration-300 ${
+                          isSelected
+                            ? "border-primary bg-gradient-to-br from-primary to-accent text-on-primary scale-110 shadow-md shadow-primary/30"
+                            : "border-surface-strong bg-canvas/40 text-transparent group-hover:border-primary/40"
+                        }`}
+                        aria-hidden
+                      >
+                        {isSelected ? (
+                          <Check className="h-3.5 w-3.5" strokeWidth={3} />
+                        ) : (
+                          <span className="text-xs font-medium text-muted group-hover:text-ink">
+                            {i + 1}
+                          </span>
+                        )}
                       </span>
-                    )}
-                  </span>
-                </button>
-              );
-            })}
-          </div>
-        </fieldset>
+                      <span className="flex flex-col gap-1">
+                        <span
+                          className={`text-base font-medium leading-snug ${
+                            isSelected ? "text-ink" : "text-ink"
+                          }`}
+                        >
+                          {opt.label}
+                        </span>
+                        {opt.description && (
+                          <span className="text-sm leading-relaxed text-muted">
+                            {opt.description}
+                          </span>
+                        )}
+                      </span>
+                    </motion.button>
+                  );
+                })}
+              </div>
+            </fieldset>
+          </motion.div>
+        </AnimatePresence>
       </div>
 
       <div className="mt-6 flex items-center justify-between gap-4">

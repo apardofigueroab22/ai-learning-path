@@ -15,7 +15,7 @@ export function VideoCard({ video, index }: Props) {
 
   return (
     <article
-      className="group relative flex flex-col gap-4 rounded-2xl border border-surface-strong bg-surface-card p-4 transition-all hover:border-ink/20 hover:shadow-sm sm:p-5"
+      className="group relative flex flex-col gap-4 rounded-3xl border border-surface-strong bg-surface-card/60 backdrop-blur-md p-4 transition-all duration-300 hover:border-primary/40 hover:shadow-[0_8px_30px_rgb(139,92,246,0.12)] hover:-translate-y-1 sm:p-5"
       aria-label={`Video ${index + 1}: ${video.title}`}
     >
       <div className="relative aspect-video w-full overflow-hidden rounded-xl bg-ink/5">

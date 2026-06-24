@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { NuqsAdapter } from "nuqs/adapters/next/app";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -68,10 +69,12 @@ export default function RootLayout({
       className={`${inter.variable} ${geist.variable} ${geistMono.variable}`}
     >
       <body className="bg-canvas text-body antialiased">
-        <a href="#main" className="skip-link">
-          Skip to main content
-        </a>
-        {children}
+        <NuqsAdapter>
+          <a href="#main" className="skip-link">
+            Skip to main content
+          </a>
+          {children}
+        </NuqsAdapter>
       </body>
     </html>
   );

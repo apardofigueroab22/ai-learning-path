@@ -100,7 +100,7 @@ export function Results({ path, answers, onRestart }: Props) {
                 : "3+ hours"}
             </span>
           </div>
-          <h1 className="display-xl text-ink">{path.title}</h1>
+          <h1 className="display-xl text-transparent bg-clip-text bg-gradient-to-r from-ink to-primary pb-1">{path.title}</h1>
           <p className="body-lg max-w-2xl">{path.summary}</p>
           <p className="text-sm text-muted">
             {videoList.length} curated videos · ~{totalMinutes} minutes total
@@ -138,8 +138,9 @@ export function Results({ path, answers, onRestart }: Props) {
       </div>
 
       {/* The path explanation */}
-      <section className="mb-16 rounded-2xl border border-surface-strong bg-surface-soft p-6 sm:p-8">
-        <p className="eyebrow mb-3">Why this path</p>
+      <section className="relative mb-16 rounded-3xl border border-primary/20 bg-gradient-to-br from-surface-soft/80 to-accent-soft/30 backdrop-blur-md p-6 sm:p-8 shadow-lg overflow-hidden">
+        <div className="absolute -top-24 -right-24 h-48 w-48 rounded-full bg-accent/20 blur-3xl pointer-events-none" />
+        <p className="eyebrow mb-3 text-primary font-bold">Why this path</p>
         <p className="text-base leading-relaxed text-body">
           {TRACK_DESCRIPTION[path.track]}{" "}
           {path.level === "newcomer" &&
@@ -176,8 +177,10 @@ export function Results({ path, answers, onRestart }: Props) {
       </section>
 
       {/* Bottom CTA */}
-      <section className="mt-16 rounded-2xl bg-ink p-8 text-on-primary sm:p-12">
-        <div className="mx-auto max-w-2xl text-center">
+      <section className="relative mt-16 rounded-3xl bg-gradient-to-br from-ink via-primary to-accent p-8 text-on-primary sm:p-12 overflow-hidden shadow-2xl">
+        <div className="absolute top-0 right-0 -mr-20 -mt-20 h-64 w-64 rounded-full bg-white/10 blur-3xl" />
+        <div className="absolute bottom-0 left-0 -ml-20 -mb-20 h-64 w-64 rounded-full bg-accent/30 blur-3xl" />
+        <div className="relative mx-auto max-w-2xl text-center">
           <h2 className="display-md text-on-primary">
             One last thing
           </h2>

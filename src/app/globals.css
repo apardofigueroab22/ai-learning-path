@@ -4,34 +4,34 @@
 @custom-variant dark (@media (prefers-color-scheme: dark));
 
 @theme {
-  --color-canvas: #ffffff;
-  --color-surface-soft: #fafafa;
-  --color-surface-card: #f5f5f5;
-  --color-surface-strong: #e5e7eb;
-  --color-ink: #0a0a0a;
-  --color-body: #404040;
-  --color-muted: #737373;
-  --color-primary: #0a0a0a;
+  --color-canvas: #fdfcff;
+  --color-surface-soft: #f4f0fa;
+  --color-surface-card: rgba(255, 255, 255, 0.7);
+  --color-surface-strong: rgba(139, 92, 246, 0.15);
+  --color-ink: #1e1b4b;
+  --color-body: #4c4a67;
+  --color-muted: #8b89a4;
+  --color-primary: #4f46e5;
   --color-on-primary: #ffffff;
-  --color-accent: #6366f1;
-  --color-accent-soft: #eef2ff;
-  --color-accent-fg: #4338ca;
+  --color-accent: #8b5cf6;
+  --color-accent-soft: rgba(139, 92, 246, 0.1);
+  --color-accent-fg: #6d28d9;
   --color-success: #10b981;
   --color-success-soft: #ecfdf5;
   --color-warning: #f59e0b;
   --color-error: #ef4444;
-  --color-focus: #6366f1;
+  --color-focus: #a78bfa;
 
   --font-sans: var(--font-inter), "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   --font-display: var(--font-geist), "Geist", "Inter", system-ui, -apple-system, sans-serif;
   --font-mono: var(--font-geist-mono), "Geist Mono", "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
 
-  --radius-xs: 4px;
-  --radius-sm: 6px;
-  --radius-md: 8px;
-  --radius-lg: 12px;
-  --radius-xl: 16px;
-  --radius-2xl: 24px;
+  --radius-xs: 6px;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+  --radius-2xl: 32px;
   --radius-pill: 9999px;
 
   --spacing-section: 96px;
@@ -43,21 +43,21 @@
 @layer base {
   @media (prefers-color-scheme: dark) {
     :root {
-      --color-canvas: #0a0a0a;
-      --color-surface-soft: #171717;
-      --color-surface-card: #1a1a1a;
-      --color-surface-strong: #262626;
-      --color-ink: #fafafa;
-      --color-body: #a3a3a3;
-      --color-muted: #737373;
-      --color-primary: #fafafa;
-      --color-on-primary: #0a0a0a;
-      --color-accent: #818cf8;
-      --color-accent-soft: #1e1b4b;
-      --color-accent-fg: #c7d2fe;
+      --color-canvas: #09090b;
+      --color-surface-soft: #18181b;
+      --color-surface-card: rgba(39, 39, 42, 0.5);
+      --color-surface-strong: rgba(139, 92, 246, 0.2);
+      --color-ink: #f8fafc;
+      --color-body: #a1a1aa;
+      --color-muted: #71717a;
+      --color-primary: #8b5cf6;
+      --color-on-primary: #ffffff;
+      --color-accent: #d946ef;
+      --color-accent-soft: rgba(217, 70, 239, 0.15);
+      --color-accent-fg: #f5d0fe;
       --color-success: #34d399;
       --color-success-soft: #022c22;
-      --color-focus: #818cf8;
+      --color-focus: #c084fc;
     }
   }
 }
@@ -243,6 +243,7 @@
     background-color: var(--color-surface-card);
     border-radius: var(--radius-lg);
     padding: 24px;
+    backdrop-filter: blur(16px);
   }
 
   .pill {
