@@ -24,6 +24,10 @@ const securityHeaders = [
   {
     key: 'Permissions-Policy',
     value: 'camera=(), microphone=(), geolocation=(), browsing-topics=()'
+  },
+  {
+    key: 'Content-Security-Policy',
+    value: "default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' blob: data: https://img.youtube.com https://i.ytimg.com; font-src 'self'; connect-src 'self' https://vitals.vercel-insights.com;"
   }
 ];
 
