@@ -27,6 +27,11 @@ npm run typecheck
 npm run test     # path-recommendation regression tests
 ```
 
+Use `npm ci --ignore-scripts` for a clean, lockfile-based validation install.
+The proposed Validate workflow runs lint, types, regression tests and build with
+read-only repository permissions. Passing checks do not verify YouTube availability
+or establish catalog readiness; follow the catalog review below before sharing.
+
 ## Folder Structure
 
 ```
